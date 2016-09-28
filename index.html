@@ -19,7 +19,7 @@
       <h1>
 <a id="welcome-to-xiaopeng-liaos-blog" class="anchor" href="#welcome-to-xiaopeng-liaos-blog" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Xiaopeng Liao's blog</h1>
 
-<p>I am interesting in software design in general, love to try new ideas, currently into big data and machine learning technologies.</p>
+<p>I am interesting in software design in general, love to try new ideas, writing software for different systems (embedded, desktop, server), laying out circuit boards, implementing algorithms... and currently into big data and machine learning technologies.</p>
 
 <h2>
 <a id="spark-learning" class="anchor" href="#spark-learning" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Spark Learning</h2>
@@ -81,6 +81,11 @@ It turn out to be that when there is an operation on RDD, the DAG scheduler will
       case (taskIndex, allowedLocality) =&gt; (taskIndex, allowedLocality, true)}
   }
 </code></pre>
+
+<h3>
+<a id="2016-09-27-looking-into-spark-neural-network-multilayerperceptronclassifier-implementation" class="anchor" href="#2016-09-27-looking-into-spark-neural-network-multilayerperceptronclassifier-implementation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>[2016-09-27] Looking into Spark neural network (MultilayerPerceptronClassifier) implementation</h3>
+
+<p>I was always curious on how Spark achieves the distributed learning with its RDD. And finally I got some time to look into this interesting topic, and it looks like Spark does the random sample first from the data set, then broadcast the current weight, then for each sample it calculates the gradient and the loss, then it sums up all the gradients and loss for this subset, divide by sample number to get an average of both loss and gradient. Then as next step, it uses LBFGS algorithm to update the weights. Normally the LBFGS is a iterative update, however, in Spark, it is implemented by using average of samples to perform on update, so I guess it is time to get into some paper on effectiveness of this type of method :)</p>
 
       <footer class="site-footer">
 
